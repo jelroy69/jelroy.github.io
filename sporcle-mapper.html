@@ -22,6 +22,10 @@
             position: absolute;
             transform: translate(-50%, -50%);
         }
+        #coordinatesOutput {
+            float: left;
+            margin-right: 20px;
+        }
     </style>
 </head>
 <body>
@@ -38,9 +42,9 @@
 
 <button onclick="generateCoordinates()">Generate Coordinates</button><br><br>
 
-<div id="canvas"></div>
-
 <pre id="coordinatesOutput"></pre>
+
+<div id="canvas"></div>
 
 <script>
 function generateCoordinates() {
@@ -53,6 +57,9 @@ function generateCoordinates() {
     const stepY = height / rows;
 
     let coordinates = '';
+
+    const canvas = document.getElementById('canvas');
+    canvas.innerHTML = ''; // Reset canvas
 
     for (let row = 0; row < rows; row++) {
         for (let col = 0; col < cols; col++) {
@@ -68,7 +75,6 @@ function generateCoordinates() {
             coordinates += `${x1},${y1}\n\n`;
 
             // Display dots
-            const canvas = document.getElementById('canvas');
             const dot = document.createElement('div');
             dot.className = 'dot';
             dot.style.left = x1 + 'px';
