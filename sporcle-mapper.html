@@ -23,6 +23,7 @@
         #coordinatesOutput {
             float: left;
             margin-right: 20px;
+            user-select: all;
         }
     </style>
 </head>
@@ -41,7 +42,7 @@
 <button onclick="generateCoordinates()">Generate Coordinates</button>
 <button onclick="copyCoordinates()">Copy</button><br><br>
 
-<pre id="coordinatesOutput"></pre>
+<pre id="coordinatesOutput" contenteditable="true"></pre>
 
 <div id="canvas"></div>
 
@@ -110,7 +111,12 @@ function generateCoordinates() {
 
 function copyCoordinates() {
     const coordinatesOutput = document.getElementById('coordinatesOutput');
-    coordinatesOutput.select();
+    coordinatesOutput.focus();
+    const selection = window.getSelection();
+    const range = document.createRange();
+    range.selectNodeContents(coordinatesOutput);
+    selection.removeAllRanges();
+    selection.addRange(range);
     document.execCommand('copy');
     alert('Coordinates copied to clipboard!');
 }
