@@ -2,6 +2,27 @@
 <html>
 <head>
     <title>Rectangle Coordinates Generator</title>
+    <style>
+        #canvas {
+            width: 900px;
+            height: 900px;
+            border: 1px solid #000;
+            margin-bottom: 20px;
+            position: relative;
+            float: left;
+        }
+        .dot {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background-color: red;
+            position: absolute;
+        }
+        .number {
+            position: absolute;
+            transform: translate(-50%, -50%);
+        }
+    </style>
 </head>
 <body>
 
@@ -16,6 +37,8 @@
 <input type="number" id="rowsInput" value="2"><br><br>
 
 <button onclick="generateCoordinates()">Generate Coordinates</button><br><br>
+
+<div id="canvas"></div>
 
 <pre id="coordinatesOutput"></pre>
 
@@ -43,6 +66,30 @@ function generateCoordinates() {
             coordinates += `${x2},${y2}\n`;
             coordinates += `${x2},${y1}\n`;
             coordinates += `${x1},${y1}\n\n`;
+
+            // Display dots
+            const canvas = document.getElementById('canvas');
+            const dot = document.createElement('div');
+            dot.className = 'dot';
+            dot.style.left = x1 + 'px';
+            dot.style.top = y1 + 'px';
+            canvas.appendChild(dot);
+
+            const dot2 = document.createElement('div');
+            dot2.className = 'dot';
+            dot2.style.left = x2 + 'px';
+            dot2.style.top = y2 + 'px';
+            canvas.appendChild(dot2);
+
+            // Display numbers
+            const centerX = (x1 + x2) / 2;
+            const centerY = (y1 + y2) / 2;
+            const number = document.createElement('div');
+            number.className = 'number';
+            number.textContent = row * cols + col + 1;
+            number.style.left = centerX + 'px';
+            number.style.top = centerY + 'px';
+            canvas.appendChild(number);
         }
     }
 
