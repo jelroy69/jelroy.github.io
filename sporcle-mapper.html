@@ -21,9 +21,7 @@
             transform: translate(-50%, -50%);
         }
         #coordinatesOutput {
-            float: left;
-            margin-right: 20px;
-            user-select: all;
+            display: none;
         }
     </style>
 </head>
@@ -42,7 +40,7 @@
 <button onclick="generateCoordinates()">Generate Coordinates</button>
 <button onclick="copyCoordinates()">Copy</button><br><br>
 
-<pre id="coordinatesOutput" contenteditable="true"></pre>
+<pre id="coordinatesOutput"></pre>
 
 <div id="canvas"></div>
 
@@ -75,11 +73,11 @@ function generateCoordinates() {
             let x2 = x1 + stepX;
             let y2 = y1 + stepY;
 
-            coordinates += `${x1},${y1};`;
-            coordinates += `${x1},${y2};`;
-            coordinates += `${x2},${y2};`;
-            coordinates += `${x2},${y1};`;
-            coordinates += `${x1},${y1};\n`; // Newline for each shape
+            coordinates += `${x1},${y1}\n`;
+            coordinates += `${x1},${y2}\n`;
+            coordinates += `${x2},${y2}\n`;
+            coordinates += `${x2},${y1}\n`;
+            coordinates += `${x1},${y1}\n\n`; // Newline for each shape
 
             // Display dots
             const dot = document.createElement('div');
@@ -111,12 +109,7 @@ function generateCoordinates() {
 
 function copyCoordinates() {
     const coordinatesOutput = document.getElementById('coordinatesOutput');
-    coordinatesOutput.focus();
-    const selection = window.getSelection();
-    const range = document.createRange();
-    range.selectNodeContents(coordinatesOutput);
-    selection.removeAllRanges();
-    selection.addRange(range);
+    coordinatesOutput.select();
     document.execCommand('copy');
     alert('Coordinates copied to clipboard!');
 }
