@@ -21,6 +21,8 @@
             transform: translate(-50%, -50%);
         }
         #coordinatesOutput {
+            white-space: pre;
+            font-family: monospace;
             display: none;
         }
     </style>
@@ -40,7 +42,7 @@
 <button onclick="generateCoordinates()">Generate Coordinates</button>
 <button onclick="copyCoordinates()">Copy</button><br><br>
 
-<textarea id="coordinatesOutput" readonly></textarea>
+<pre id="coordinatesOutput"></pre>
 
 <div id="canvas"></div>
 
@@ -105,6 +107,7 @@ function generateCoordinates() {
     }
 
     document.getElementById('coordinatesOutput').textContent = coordinates;
+    document.getElementById('coordinatesOutput').style.display = 'block'; // Show coordinates as plain text
 }
 
 function copyCoordinates() {
