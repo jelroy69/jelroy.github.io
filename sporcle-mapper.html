@@ -23,26 +23,32 @@
         #coordinatesOutput {
             white-space: pre;
             font-family: monospace;
-            display: none;
+            float: left;
+            margin-right: 20px;
+        }
+        #boxDisplay {
+            float: right;
         }
     </style>
 </head>
 <body>
 
-<label for="widthInput">Width:</label>
-<input type="number" id="widthInput" value="900">
-<label for="heightInput">Height:</label>
-<input type="number" id="heightInput" value="900"><br><br>
+<div id="coordinatesOutput" style="display: none;"></div>
 
-<label for="colsInput">Columns:</label>
-<input type="number" id="colsInput" value="2">
-<label for="rowsInput">Rows:</label>
-<input type="number" id="rowsInput" value="2"><br><br>
+<div id="boxDisplay">
+    <label for="widthInput">Width:</label>
+    <input type="number" id="widthInput" value="900">
+    <label for="heightInput">Height:</label>
+    <input type="number" id="heightInput" value="900"><br><br>
 
-<button onclick="generateCoordinates()">Generate Coordinates</button>
-<button onclick="copyCoordinates()">Copy</button><br><br>
+    <label for="colsInput">Columns:</label>
+    <input type="number" id="colsInput" value="2">
+    <label for="rowsInput">Rows:</label>
+    <input type="number" id="rowsInput" value="2"><br><br>
 
-<pre id="coordinatesOutput"></pre>
+    <button onclick="generateCoordinates()">Generate Coordinates</button>
+    <button onclick="copyCoordinates()">Copy</button><br><br>
+</div>
 
 <div id="canvas"></div>
 
@@ -112,8 +118,16 @@ function generateCoordinates() {
 
 function copyCoordinates() {
     const coordinatesOutput = document.getElementById('coordinatesOutput');
-    coordinatesOutput.select();
+    const coordinates = coordinatesOutput.textContent;
+    
+    const tempTextArea = document.createElement('textarea');
+    tempTextArea.value = coordinates;
+    document.body.appendChild(tempTextArea);
+    
+    tempTextArea.select();
     document.execCommand('copy');
+    
+    document.body.removeChild(tempTextArea);
     alert('Coordinates copied to clipboard!');
 }
 </script>
