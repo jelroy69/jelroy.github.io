@@ -36,6 +36,9 @@
             display: none;
             clear: both;
         }
+        #copyButton {
+            clear: both;
+        }
     </style>
 </head>
 <body>
@@ -53,6 +56,7 @@
 </div>
 
 <button id="generateButton" onclick="generateCoordinates()">Generate Coordinates</button>
+<button id="copyButton" onclick="copyCoordinates()">Copy</button><br><br>
 
 <div id="canvasContainer">
     <div id="canvas"></div>
@@ -126,6 +130,21 @@ function generateCoordinates() {
 
     document.getElementById('coordinatesOutput').textContent = coordinates;
     document.getElementById('coordinatesOutput').style.display = 'block'; // Show coordinates as plain text
+}
+
+function copyCoordinates() {
+    const coordinatesOutput = document.getElementById('coordinatesOutput');
+    const coordinates = coordinatesOutput.textContent;
+    
+    const tempTextArea = document.createElement('textarea');
+    tempTextArea.value = coordinates;
+    document.body.appendChild(tempTextArea);
+    
+    tempTextArea.select();
+    document.execCommand('copy');
+    
+    document.body.removeChild(tempTextArea);
+    alert('Coordinates copied to clipboard!');
 }
 </script>
 
