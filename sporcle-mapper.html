@@ -88,17 +88,17 @@ function generateCoordinates() {
     coordinatesOutput.textContent = ''; // Reset coordinates
 
     for (let row = 0; row < rows; row++) {
-        for (let col = 0; col < cols; col++) {
-            let x1 = col * stepX.toFixed(3);
-            let y1 = row * stepY.toFixed(3);
-            let x2 = x1 + stepX.toFixed(3);
-            let y2 = y1 + stepY.toFixed(3);
+    for (let col = 0; col < cols; col++) {
+        let x1 = Math.round((col * stepX) * 1000) / 1000;
+        let y1 = Math.round((row * stepY) * 1000) / 1000;
+        let x2 = Math.round(((col + 1) * stepX) * 1000) / 1000;
+        let y2 = Math.round(((row + 1) * stepY) * 1000) / 1000;
 
-            coordinates += `${x1},${y1};`;
-            coordinates += `${x1},${y2};`;
-            coordinates += `${x2},${y2};`;
-            coordinates += `${x2},${y1};`;
-            coordinates += `${x1},${y1};\n`; // Newline for each shape
+        coordinates += `${x1},${y1};`;
+        coordinates += `${x1},${y2};`;
+        coordinates += `${x2},${y2};`;
+        coordinates += `${x2},${y1};`;
+        coordinates += `${x1},${y1};\n`; // Newline for each shape
 
             // Display boxes
             const box = document.createElement('div');
