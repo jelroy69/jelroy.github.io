@@ -89,10 +89,10 @@ function generateCoordinates() {
 
     for (let row = 0; row < rows; row++) {
         for (let col = 0; col < cols; col++) {
-            let x1 = col * stepX;
-            let y1 = row * stepY;
-            let x2 = x1 + stepX;
-            let y2 = y1 + stepY;
+            let x1 = col * stepX.toFixed(3);
+            let y1 = row * stepY.toFixed(3);
+            let x2 = x1 + stepX.toFixed(3);
+            let y2 = y1 + stepY.toFixed(3);
 
             coordinates += `${x1},${y1};`;
             coordinates += `${x1},${y2};`;
