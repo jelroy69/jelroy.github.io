@@ -3,11 +3,14 @@
 <head>
     <title>Rectangle Coordinates Generator</title>
     <style>
+        #canvasContainer {
+            float: left;
+            margin-right: 20px;
+        }
         #canvas {
             border: 1px solid #000;
             margin-bottom: 20px;
             position: relative;
-            float: left;
         }
         .dot {
             width: 5px;
@@ -20,31 +23,43 @@
             position: absolute;
             transform: translate(-50%, -50%);
         }
+        #inputFields {
+            float: left;
+            margin-bottom: 20px;
+        }
+        #generateButton {
+            clear: both;
+        }
         #coordinatesOutput {
             white-space: pre;
             font-family: monospace;
             display: none;
+            clear: both;
         }
     </style>
 </head>
 <body>
 
-<label for="widthInput">Width:</label>
-<input type="number" id="widthInput" value="900">
-<label for="heightInput">Height:</label>
-<input type="number" id="heightInput" value="900"><br><br>
+<div id="inputFields">
+    <label for="widthInput">Width:</label>
+    <input type="number" id="widthInput" value="900">
+    <label for="heightInput">Height:</label>
+    <input type="number" id="heightInput" value="900"><br><br>
 
-<label for="colsInput">Columns:</label>
-<input type="number" id="colsInput" value="2">
-<label for="rowsInput">Rows:</label>
-<input type="number" id="rowsInput" value="2"><br><br>
+    <label for="colsInput">Columns:</label>
+    <input type="number" id="colsInput" value="2">
+    <label for="rowsInput">Rows:</label>
+    <input type="number" id="rowsInput" value="2"><br><br>
+</div>
 
-<button onclick="generateCoordinates()">Generate Coordinates</button>
-<button onclick="copyCoordinates()">Copy</button><br><br>
+<button id="generateButton" onclick="generateCoordinates()">Generate Coordinates</button>
 
-<pre id="coordinatesOutput"></pre>
+<div id="canvasContainer">
+    <div id="canvas"></div>
+    <div id="numberedBoxes"></div>
+</div>
 
-<div id="canvas"></div>
+<div id="coordinatesOutput" style="display: none;"></div>
 
 <script>
 function generateCoordinates() {
@@ -67,6 +82,9 @@ function generateCoordinates() {
     canvas.style.width = width + 'px';
     canvas.style.height = height + 'px';
     canvas.innerHTML = ''; // Reset canvas
+
+    const numberedBoxes = document.getElementById('numberedBoxes');
+    numberedBoxes.innerHTML = ''; // Reset numbered boxes
 
     for (let row = 0; row < rows; row++) {
         for (let col = 0; col < cols; col++) {
@@ -102,27 +120,12 @@ function generateCoordinates() {
             number.textContent = row * cols + col + 1;
             number.style.left = centerX + 'px';
             number.style.top = centerY + 'px';
-            canvas.appendChild(number);
+            numberedBoxes.appendChild(number);
         }
     }
 
     document.getElementById('coordinatesOutput').textContent = coordinates;
     document.getElementById('coordinatesOutput').style.display = 'block'; // Show coordinates as plain text
-}
-
-function copyCoordinates() {
-    const coordinatesOutput = document.getElementById('coordinatesOutput');
-    const coordinates = coordinatesOutput.textContent;
-    
-    const tempTextArea = document.createElement('textarea');
-    tempTextArea.value = coordinates;
-    document.body.appendChild(tempTextArea);
-    
-    tempTextArea.select();
-    document.execCommand('copy');
-    
-    document.body.removeChild(tempTextArea);
-    alert('Coordinates copied to clipboard!');
 }
 </script>
 
