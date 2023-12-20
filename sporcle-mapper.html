@@ -24,19 +24,22 @@
             white-space: pre;
             font-family: monospace;
             display: none;
+            clear: both;
         }
         #inputFields {
             float: left;
+            margin-bottom: 20px;
+        }
+        #generateButton {
+            clear: both;
         }
         #numberedBoxes {
-            float: right;
+            float: left;
             margin-left: 20px;
         }
     </style>
 </head>
 <body>
-
-<div id="coordinatesOutput" style="display: none;"></div>
 
 <div id="inputFields">
     <label for="widthInput">Width:</label>
@@ -48,14 +51,15 @@
     <input type="number" id="colsInput" value="2">
     <label for="rowsInput">Rows:</label>
     <input type="number" id="rowsInput" value="2"><br><br>
-
-    <button onclick="generateCoordinates()">Generate Coordinates</button>
-    <button onclick="copyCoordinates()">Copy</button><br><br>
 </div>
+
+<button id="generateButton" onclick="generateCoordinates()">Generate Coordinates</button>
 
 <div id="canvas"></div>
 
 <div id="numberedBoxes"></div>
+
+<div id="coordinatesOutput" style="display: none;"></div>
 
 <script>
 function generateCoordinates() {
@@ -122,21 +126,6 @@ function generateCoordinates() {
 
     document.getElementById('coordinatesOutput').textContent = coordinates;
     document.getElementById('coordinatesOutput').style.display = 'block'; // Show coordinates as plain text
-}
-
-function copyCoordinates() {
-    const coordinatesOutput = document.getElementById('coordinatesOutput');
-    const coordinates = coordinatesOutput.textContent;
-    
-    const tempTextArea = document.createElement('textarea');
-    tempTextArea.value = coordinates;
-    document.body.appendChild(tempTextArea);
-    
-    tempTextArea.select();
-    document.execCommand('copy');
-    
-    document.body.removeChild(tempTextArea);
-    alert('Coordinates copied to clipboard!');
 }
 </script>
 
