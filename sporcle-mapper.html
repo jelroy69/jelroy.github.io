@@ -72,7 +72,7 @@ function generateCoordinates() {
             coordinates += `${x1},${y2};`;
             coordinates += `${x2},${y2};`;
             coordinates += `${x2},${y1};`;
-            coordinates += `${x1},${y1};`; // Separated by semicolon for each shape
+            coordinates += `${x1},${y1};\n`; // Newline for each shape
 
             // Display dots
             const dot = document.createElement('div');
