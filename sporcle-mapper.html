@@ -12,16 +12,14 @@
             margin-bottom: 20px;
             position: relative;
         }
-        .dot {
-            width: 5px;
-            height: 5px;
-            border-radius: 50%;
-            background-color: red;
+        .box {
+            border: 1px solid #000;
             position: absolute;
         }
         .number {
             position: absolute;
             transform: translate(-50%, -50%);
+            z-index: 1; /* Ensure numbers are above boxes */
         }
         #inputFields {
             float: left;
@@ -33,14 +31,11 @@
         #coordinatesOutput {
             white-space: pre;
             font-family: monospace;
-            display: none;
+            float: left;
             clear: both;
         }
         #copyButton {
             clear: both;
-        }
-        #numberedBoxes {
-            position: relative;
         }
     </style>
 </head>
@@ -58,15 +53,14 @@
     <input type="number" id="rowsInput" value="2"><br><br>
 </div>
 
+<div id="coordinatesOutput" style="display: none;"></div>
+
 <button id="generateButton" onclick="generateCoordinates()">Generate Coordinates</button>
 <button id="copyButton" onclick="copyCoordinates()">Copy</button><br><br>
 
 <div id="canvasContainer">
     <div id="canvas"></div>
-    <div id="numberedBoxes"></div>
 </div>
-
-<div id="coordinatesOutput" style="display: none;"></div>
 
 <script>
 function generateCoordinates() {
@@ -90,8 +84,8 @@ function generateCoordinates() {
     canvas.style.height = height + 'px';
     canvas.innerHTML = ''; // Reset canvas
 
-    const numberedBoxes = document.getElementById('numberedBoxes');
-    numberedBoxes.innerHTML = ''; // Reset numbered boxes
+    const coordinatesOutput = document.getElementById('coordinatesOutput');
+    coordinatesOutput.textContent = ''; // Reset coordinates
 
     for (let row = 0; row < rows; row++) {
         for (let col = 0; col < cols; col++) {
@@ -106,18 +100,14 @@ function generateCoordinates() {
             coordinates += `${x2},${y1};`;
             coordinates += `${x1},${y1};\n`; // Newline for each shape
 
-            // Display dots
-            const dot = document.createElement('div');
-            dot.className = 'dot';
-            dot.style.left = x1 + 'px';
-            dot.style.top = y1 + 'px';
-            canvas.appendChild(dot);
-
-            const dot2 = document.createElement('div');
-            dot2.className = 'dot';
-            dot2.style.left = x2 + 'px';
-            dot2.style.top = y2 + 'px';
-            canvas.appendChild(dot2);
+            // Display boxes
+            const box = document.createElement('div');
+            box.className = 'box';
+            box.style.left = x1 + 'px';
+            box.style.top = y1 + 'px';
+            box.style.width = stepX + 'px';
+            box.style.height = stepY + 'px';
+            canvas.appendChild(box);
 
             // Display numbers
             const centerX = (x1 + x2) / 2;
@@ -127,12 +117,12 @@ function generateCoordinates() {
             number.textContent = row * cols + col + 1;
             number.style.left = centerX + 'px';
             number.style.top = centerY + 'px';
-            numberedBoxes.appendChild(number);
+            canvas.appendChild(number);
         }
     }
 
-    document.getElementById('coordinatesOutput').textContent = coordinates;
-    document.getElementById('coordinatesOutput').style.display = 'block'; // Show coordinates as plain text
+    coordinatesOutput.textContent = coordinates;
+    coordinatesOutput.style.display = 'block'; // Show coordinates as plain text
 }
 
 function copyCoordinates() {
