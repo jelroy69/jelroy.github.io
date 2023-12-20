@@ -68,34 +68,11 @@ function generateCoordinates() {
             let x2 = x1 + stepX;
             let y2 = y1 + stepY;
 
-            coordinates += `${x1},${y1}\n`;
-            coordinates += `${x1},${y2}\n`;
-            coordinates += `${x2},${y2}\n`;
-            coordinates += `${x2},${y1}\n`;
-            coordinates += `${x1},${y1}\n\n`;
-
-            // Display dots
-            const dot = document.createElement('div');
-            dot.className = 'dot';
-            dot.style.left = x1 + 'px';
-            dot.style.top = y1 + 'px';
-            canvas.appendChild(dot);
-
-            const dot2 = document.createElement('div');
-            dot2.className = 'dot';
-            dot2.style.left = x2 + 'px';
-            dot2.style.top = y2 + 'px';
-            canvas.appendChild(dot2);
-
-            // Display numbers
-            const centerX = (x1 + x2) / 2;
-            const centerY = (y1 + y2) / 2;
-            const number = document.createElement('div');
-            number.className = 'number';
-            number.textContent = row * cols + col + 1;
-            number.style.left = centerX + 'px';
-            number.style.top = centerY + 'px';
-            canvas.appendChild(number);
+            coordinates += `${x1},${y1};`;
+            coordinates += `${x1},${y2};`;
+            coordinates += `${x2},${y2};`;
+            coordinates += `${x2},${y1};`;
+            coordinates += `${x1},${y1};`; // Separated by semicolon for each shape
         }
     }
 
