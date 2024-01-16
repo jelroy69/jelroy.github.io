@@ -160,6 +160,7 @@ function generateCoordinates() {
 
 function handleUploadClick(box, boxNumber) {
     const imageInput = document.getElementById('imageInput');
+    imageInput.value = ''; // Clear previous input value
     imageInput.addEventListener('change', (event) => {
         const files = event.target.files;
 
