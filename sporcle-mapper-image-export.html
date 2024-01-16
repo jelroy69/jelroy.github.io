@@ -14,6 +14,8 @@
             border: 1px solid #000;
             margin-bottom: 20px;
             position: relative;
+            width: calc(100% + 8px);
+            height: calc(100% + 20px);
         }
 
         .box {
@@ -75,8 +77,20 @@
     <button id="exportButton" onclick="exportCollage()">Export Collage</button><br><br>
 
     <div id="canvasContainer">
-        <div id="canvas" style="width: calc(100% + 8px); height: calc(100% + 20px);"></div>
+        <div id="canvas"></div>
     </div>
+
+    <script>
+        // ... (rest of the JavaScript code remains the same)
+    </script>
+
+    <!-- Include the html2canvas library -->
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+
+</body>
+
+</html>
+
 
     <script>
         function generateCoordinates() {
