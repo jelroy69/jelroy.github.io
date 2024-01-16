@@ -18,6 +18,7 @@
         .box {
             border: 1px solid #000;
             position: absolute;
+            display: inline-block;
         }
         .number {
             position: absolute;
@@ -26,7 +27,7 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            z-index: 1; /* Ensure numbers are above boxes */
+            z-index: 1;
         }
         .uploadButton {
             position: absolute;
@@ -38,22 +39,16 @@
             float: left;
             margin-bottom: 20px;
         }
-        #generateButton {
+        #generateButton,
+        #copyButton,
+        #uploadButton,
+        #exportButton {
             clear: both;
         }
         #coordinatesOutput {
             white-space: pre;
             font-family: monospace;
             float: left;
-            clear: both;
-        }
-        #copyButton {
-            clear: both;
-        }
-        #uploadButton {
-            clear: both;
-        }
-        #exportButton {
             clear: both;
         }
     </style>
@@ -63,7 +58,7 @@
 <h4>Created by <a href="https://sporcle.com/user/jelroy/">jelroy</a></h4>
 <div id="inputFields">
     <label for="widthInput">Width:</label>
-    <input type="number" id="widthInput" value="900", max="920">
+    <input type="number" id="widthInput" value="900" max="920">
     <label for="heightInput">Height:</label>
     <input type="number" id="heightInput" value="900"><br><br>
 
@@ -110,17 +105,17 @@ function generateCoordinates() {
     coordinatesOutput.textContent = ''; // Reset coordinates
 
     for (let row = 0; row < rows; row++) {
-    for (let col = 0; col < cols; col++) {
-        let x1 = Math.round((col * stepX) * 100) / 100;
-        let y1 = Math.round((row * stepY) * 100) / 100;
-        let x2 = Math.round(((col + 1) * stepX) * 100) / 100;
-        let y2 = Math.round(((row + 1) * stepY) * 100) / 100;
+        for (let col = 0; col < cols; col++) {
+            let x1 = Math.round((col * stepX) * 100) / 100;
+            let y1 = Math.round((row * stepY) * 100) / 100;
+            let x2 = Math.round(((col + 1) * stepX) * 100) / 100;
+            let y2 = Math.round(((row + 1) * stepY) * 100) / 100;
 
-        coordinates += `${x1},${y1};`;
-        coordinates += `${x1},${y2};`;
-        coordinates += `${x2},${y2};`;
-        coordinates += `${x2},${y1};`;
-        coordinates += `${x1},${y1};\n`; // Newline for each shape
+            coordinates += `${x1},${y1};`;
+            coordinates += `${x1},${y2};`;
+            coordinates += `${x2},${y2};`;
+            coordinates += `${x2},${y1};`;
+            coordinates += `${x1},${y1};\n`; // Newline for each shape
 
             // Display boxes
             const box = document.createElement('div');
@@ -137,8 +132,6 @@ function generateCoordinates() {
             const number = document.createElement('div');
             number.className = 'number';
             number.textContent = row * cols + col + 1;
-            number.style.left = centerX + 'px';
-            number.style.top = centerY + 'px';
             box.appendChild(number);
 
             // Display upload buttons
