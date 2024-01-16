@@ -142,6 +142,7 @@
                     box.style.top = y1 + 'px';
                     box.style.width = stepX + 'px';
                     box.style.height = stepY + 'px';
+                    box.dataset.number = row * cols + col + 1; // Store the original number
                     canvas.appendChild(box);
                     boxes.push(box);
 
@@ -208,6 +209,8 @@
                     number.className = 'number';
                     number.textContent = parseInt(box.dataset.number); // Retrieve the original number
                     box.appendChild(number);
+
+                    button.style.display = 'none';
                 });
             } else {
                 // Show upload buttons
