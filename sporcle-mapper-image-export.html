@@ -194,13 +194,23 @@
         function toggleUploadButtons() {
             const uploadButtons = document.querySelectorAll('.uploadButton');
 
-            // Clear existing uploads
-            uploadButtons.forEach((button) => {
-                button.style.display = 'block';
-                button.parentElement.querySelector('.number').style.display = 'none';
-            });
+            if (uploadButtonsVisible) {
+                // Clear existing uploads
+                uploadButtons.forEach((button) => {
+                    button.style.display = 'none';
+                    button.parentElement.querySelector('.number').style.display = 'block';
+                });
 
-            uploadButtonsVisible = true;
+                uploadButtonsVisible = false;
+            } else {
+                // Show upload buttons
+                uploadButtons.forEach((button) => {
+                    button.style.display = 'block';
+                    button.parentElement.querySelector('.number').style.display = 'none';
+                });
+
+                uploadButtonsVisible = true;
+            }
         }
 
         function handleImageUpload(event, box, number) {
