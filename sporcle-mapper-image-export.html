@@ -158,8 +158,23 @@
             coordinatesOutput.textContent = coordinates;
             coordinatesOutput.style.display = 'block'; // Show coordinates as plain text
 
+            // Clear existing uploads
+            const uploadButtons = document.querySelectorAll('.uploadButton');
+            uploadButtons.forEach((button) => {
+                const box = button.parentElement;
+                while (box.firstChild) {
+                    box.removeChild(box.firstChild);
+                }
+
+                // Display number
+                const number = document.createElement('div');
+                number.className = 'number';
+                number.textContent = parseInt(box.dataset.number); // Retrieve the original number
+                box.appendChild(number);
+            });
+
             // Initially hide upload buttons
-            hideUploadButtons();
+            toggleUploadButtons();
         }
 
         function copyCoordinates() {
@@ -179,38 +194,33 @@
 
         function toggleUploadButtons() {
             const uploadButtons = document.querySelectorAll('.uploadButton');
-        
+
             if (uploadButtonsVisible) {
                 // Clear existing uploads
-                button.style.display = 'none';
+                uploadButtons.forEach((button) => {
+                    const box = button.parentElement;
+                    while (box.firstChild) {
+                        box.removeChild(box.firstChild);
+                    }
+
+                    // Display number
+                    const number = document.createElement('div');
+                    number.className = 'number';
+                    number.textContent = parseInt(box.dataset.number); // Retrieve the original number
+                    box.appendChild(number);
+                });
             } else {
                 // Show upload buttons
-                button.style.display = 'block';
+                uploadButtons.forEach((button) => {
+                    const box = button.parentElement;
+                    const number = box.querySelector('.number');
+                    number.style.display = 'none'; // Hide the number
+                    button.style.display = 'block';
+                });
             }
-        
+
             uploadButtonsVisible = !uploadButtonsVisible;
         }
-        
-        function showUploadButtons() {
-            const uploadButtons = document.querySelectorAll('.uploadButton');
-        
-            uploadButtons.forEach((button) => {
-                button.style.display = 'block';
-                const number = button.parentElement.querySelector('.number');
-                number.style.display = 'none';
-            });
-        }
-        
-        function hideUploadButtons() {
-            const uploadButtons = document.querySelectorAll('.uploadButton');
-        
-            uploadButtons.forEach((button) => {
-                button.style.display = 'none';
-                const number = button.parentElement.querySelector('.number');
-                number.style.display = 'block';
-            });
-        }
-
 
         function handleImageUpload(event, box, number) {
             const fileInput = event.target;
