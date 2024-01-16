@@ -70,4 +70,140 @@
 
 <div id="coordinatesOutput" style="display: none;"></div>
 
-<button id="generate
+<button id="generateButton" onclick="generateCoordinates()">Generate Coordinates</button>
+<button id="copyButton" onclick="copyCoordinates()">Copy</button><br><br>
+
+<input type="file" id="imageInput" accept="image/*" multiple>
+<button id="uploadButton" onclick="uploadImages()">Upload Images</button>
+<button id="exportButton" onclick="exportCollage()">Export Collage</button><br><br>
+
+<div id="canvasContainer">
+    <div id="canvas"></div>
+</div>
+
+<script>
+function generateCoordinates() {
+    const width = parseInt(document.getElementById('widthInput').value);
+    const height = parseInt(document.getElementById('heightInput').value);
+    const cols = parseInt(document.getElementById('colsInput').value);
+    const rows = parseInt(document.getElementById('rowsInput').value);
+    
+    if (width > 920) {
+        alert('Width should be 920 or less.');
+        return;
+    }
+
+    const stepX = width / cols;
+    const stepY = height / rows;
+
+    let coordinates = '';
+
+    const canvas = document.getElementById('canvas');
+    canvas.style.width = width + 'px';
+    canvas.style.height = height + 'px';
+    canvas.innerHTML = ''; // Reset canvas
+
+    const coordinatesOutput = document.getElementById('coordinatesOutput');
+    coordinatesOutput.textContent = ''; // Reset coordinates
+
+    for (let row = 0; row < rows; row++) {
+        for (let col = 0; col < cols; col++) {
+            let x1 = Math.round((col * stepX) * 100) / 100;
+            let y1 = Math.round((row * stepY) * 100) / 100;
+            let x2 = Math.round(((col + 1) * stepX) * 100) / 100;
+            let y2 = Math.round(((row + 1) * stepY) * 100) / 100;
+
+            coordinates += `${x1},${y1};`;
+            coordinates += `${x1},${y2};`;
+            coordinates += `${x2},${y2};`;
+            coordinates += `${x2},${y1};`;
+            coordinates += `${x1},${y1};\n`; // Newline for each shape
+
+            // Display boxes
+            const box = document.createElement('div');
+            box.className = 'box';
+            box.style.left = x1 + 'px';
+            box.style.top = y1 + 'px';
+            box.style.width = stepX + 'px';
+            box.style.height = stepY + 'px';
+            canvas.appendChild(box);
+
+            // Display numbers
+            const centerX = (x1 + x2) / 2;
+            const centerY = (y1 + y2) / 2;
+            const number = document.createElement('div');
+            number.className = 'number';
+            number.textContent = row * cols + col + 1;
+            number.style.left = centerX + 'px';
+            number.style.top = centerY + 'px';
+            canvas.appendChild(number);
+        }
+    }
+
+    coordinatesOutput.textContent = coordinates;
+    coordinatesOutput.style.display = 'block'; // Show coordinates as plain text
+}
+
+function copyCoordinates() {
+    const coordinatesOutput = document.getElementById('coordinatesOutput');
+    const coordinates = coordinatesOutput.textContent;
+    
+    const tempTextArea = document.createElement('textarea');
+    tempTextArea.value = coordinates;
+    document.body.appendChild(tempTextArea);
+    
+    tempTextArea.select();
+    document.execCommand('copy');
+    
+    document.body.removeChild(tempTextArea);
+    alert('Coordinates copied to clipboard!');
+}
+
+function uploadImages() {
+    const imageInput = document.getElementById('imageInput');
+    const boxes = document.querySelectorAll('.box');
+
+    imageInput.addEventListener('change', (event) => {
+        const files = event.target.files;
+
+        if (files && files.length > 0) {
+            for (let i = 0; i < files.length && i < boxes.length; i++) {
+                const box = boxes[i];
+                const imageURL = URL.createObjectURL(files[i]);
+
+                // Clear existing content in the box
+                while (box.firstChild) {
+                    box.removeChild(box.firstChild);
+                }
+
+                // Create and append the image to the box
+                const img = document.createElement('img');
+                img.className = 'uploadedImage';
+                img.src = imageURL;
+                box.appendChild(img);
+            }
+        }
+    });
+
+    // Trigger the file input
+    imageInput.click();
+}
+
+function exportCollage() {
+    const canvasContainer = document.getElementById('canvasContainer');
+    const canvas = document.getElementById('canvas');
+
+    html2canvas(canvasContainer).then(canvas => {
+        const link = document.createElement('a');
+        link.href = canvas.toDataURL('image/png');
+        link.download = 'collage.png';
+        link.click();
+    });
+}
+</script>
+
+<!-- Include the html2canvas library -->
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+
+</body>
+</html>
