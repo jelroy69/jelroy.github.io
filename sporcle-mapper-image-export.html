@@ -182,10 +182,10 @@
         
             if (uploadButtonsVisible) {
                 // Clear existing uploads
-                hideUploadButtons();
+                button.style.display = 'none';
             } else {
                 // Show upload buttons
-                showUploadButtons();
+                button.style.display = 'block';
             }
         
             uploadButtonsVisible = !uploadButtonsVisible;
