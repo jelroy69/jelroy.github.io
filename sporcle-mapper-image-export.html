@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-
 <head>
     <title>Sporcle Quiz Rectangle Coordinate Generator</title>
     <style>
@@ -9,223 +8,223 @@
             margin-right: 20px;
             position: relative;
         }
-
         #canvas {
             border: 1px solid #000;
             margin-bottom: 20px;
-            position: absolute;
+            position: relative;
             width: calc(100% + 8px);
             height: calc(100% + 20px);
         }
-
         .box {
             border: 1px solid #000;
-            position: relative;
-            display: inline-block;
+            position: absolute;
         }
-
         .number {
             position: absolute;
-            text-align: center;
-            width: 100%;
+            transform: translate(-50%, -50%);
+            z-index: 1; /* Ensure numbers are above boxes */
+        }
+        .uploadButton {
+            position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            z-index: 1;
         }
-
         #inputFields {
             float: left;
             margin-bottom: 20px;
         }
-
-        #generateButton,
-        #copyButton,
-        #uploadButton,
-        #exportButton {
+        #generateButton {
             clear: both;
         }
-
         #coordinatesOutput {
             white-space: pre;
             font-family: monospace;
             float: left;
             clear: both;
         }
+        #copyButton {
+            clear: both;
+        }
+        #uploadButton {
+            clear: both;
+        }
+        #exportButton {
+            clear: both;
+        }
     </style>
 </head>
-
 <body>
-    <h2>Rectangle Coordinate Generator for Sporcle Image Quizzes</h2>
-    <h4>Created by <a href="https://sporcle.com/user/jelroy/">jelroy</a></h4>
-    <div id="inputFields">
-        <label for="widthInput">Width:</label>
-        <input type="number" id="widthInput" value="900" max="920">
-        <label for="heightInput">Height:</label>
-        <input type="number" id="heightInput" value="900"><br><br>
-        <label for="colsInput">Columns:</label>
-        <input type="number" id="colsInput" value="4">
-        <label for="rowsInput">Rows:</label>
-        <input type="number" id="rowsInput" value="4"><br><br>
-    </div>
+<h2>Rectangle Coordinate Generator for Sporcle Image Quizzes</h2>
+<h4>Created by <a href="https://sporcle.com/user/jelroy/">jelroy</a></h4>
+<div id="inputFields">
+    <label for="widthInput">Width:</label>
+    <input type="number" id="widthInput" value="900", max="920">
+    <label for="heightInput">Height:</label>
+    <input type="number" id="heightInput" value="900"><br><br>
 
-    <div id="coordinatesOutput" style="display: none;"></div>
+    <label for="colsInput">Columns:</label>
+    <input type="number" id="colsInput" value="4">
+    <label for="rowsInput">Rows:</label>
+    <input type="number" id="rowsInput" value="4"><br><br>
+</div>
 
-    <button id="generateButton" onclick="generateCoordinates()">Generate Coordinates</button>
-    <button id="copyButton" onclick="copyCoordinates()">Copy</button>
-    <button id="uploadButton" onclick="uploadImages()">Upload Images</button>
-    <button id="exportButton" onclick="exportCollage()">Export Collage</button><br><br>
+<div id="coordinatesOutput" style="display: none;"></div>
 
-    <div id="canvasContainer">
-        <div id="canvas"></div>
-    </div>
+<button id="generateButton" onclick="generateCoordinates()">Generate Coordinates</button>
+<button id="copyButton" onclick="copyCoordinates()">Copy</button>
+<button id="uploadButton" onclick="uploadImages()">Upload Images</button>
+<button id="exportButton" onclick="exportCollage()">Export Collage</button><br><br>
 
-    <script>
-        // ... (rest of the JavaScript code remains the same)
-    </script>
+<div id="canvasContainer">
+    <div id="canvas"></div>
+</div>
 
-    <!-- Include the html2canvas library -->
-    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+<script>
+function generateCoordinates() {
+    const width = parseInt(document.getElementById('widthInput').value);
+    const height = parseInt(document.getElementById('heightInput').value);
+    const cols = parseInt(document.getElementById('colsInput').value);
+    const rows = parseInt(document.getElementById('rowsInput').value);
+    
+    if (width > 920) {
+        alert('Width should be 920 or less.');
+        return;
+    }
+
+    const stepX = width / cols;
+    const stepY = height / rows;
+
+    let coordinates = '';
+
+    const canvas = document.getElementById('canvas');
+    canvas.style.width = '100%';
+    canvas.style.height = '100%';
+    canvas.innerHTML = ''; // Reset canvas
+
+    const coordinatesOutput = document.getElementById('coordinatesOutput');
+    coordinatesOutput.textContent = ''; // Reset coordinates
+
+    for (let row = 0; row < rows; row++) {
+    for (let col = 0; col < cols; col++) {
+        let x1 = Math.round((col * stepX) * 100) / 100;
+        let y1 = Math.round((row * stepY) * 100) / 100;
+        let x2 = Math.round(((col + 1) * stepX) * 100) / 100;
+        let y2 = Math.round(((row + 1) * stepY) * 100) / 100;
+
+        coordinates += `${x1},${y1};`;
+        coordinates += `${x1},${y2};`;
+        coordinates += `${x2},${y2};`;
+        coordinates += `${x2},${y1};`;
+        coordinates += `${x1},${y1};\n`; // Newline for each shape
+
+            // Display boxes
+            const box = document.createElement('div');
+            box.className = 'box';
+            box.style.left = x1 + 'px';
+            box.style.top = y1 + 'px';
+            box.style.width = stepX + 'px';
+            box.style.height = stepY + 'px';
+            canvas.appendChild(box);
+
+            // Display numbers
+            const centerX = (x1 + x2) / 2;
+            const centerY = (y1 + y2) / 2;
+            const number = document.createElement('div');
+            number.className = 'number';
+            number.textContent = row * cols + col + 1;
+            number.style.left = centerX + 'px';
+            number.style.top = centerY + 'px';
+            box.appendChild(number);
+
+            // Display upload buttons
+            const uploadButton = document.createElement('input');
+            uploadButton.type = 'file';
+            uploadButton.accept = 'image/*';
+            uploadButton.className = 'uploadButton';
+            uploadButton.addEventListener('change', (event) => handleImageUpload(event, box, row * cols + col + 1));
+            box.appendChild(uploadButton);
+        }
+    }
+
+    coordinatesOutput.textContent = coordinates;
+    coordinatesOutput.style.display = 'block'; // Show coordinates as plain text
+}
+
+function copyCoordinates() {
+    const coordinatesOutput = document.getElementById('coordinatesOutput');
+    const coordinates = coordinatesOutput.textContent;
+    
+    const tempTextArea = document.createElement('textarea');
+    tempTextArea.value = coordinates;
+    document.body.appendChild(tempTextArea);
+    
+    tempTextArea.select();
+    document.execCommand('copy');
+    
+    document.body.removeChild(tempTextArea);
+    alert('Coordinates copied to clipboard!');
+}
+
+function uploadImages() {
+    const boxes = document.querySelectorAll('.box');
+
+    boxes.forEach((box, index) => {
+        const uploadButton = document.createElement('input');
+        uploadButton.type = 'file';
+        uploadButton.accept = 'image/*';
+        uploadButton.className = 'uploadButton';
+        uploadButton.addEventListener('change', (event) => handleImageUpload(event, box, index + 1));
+        box.appendChild(uploadButton);
+
+        // Hide the number
+        box.querySelector('.number').style.display = 'none';
+    });
+}
+
+function handleImageUpload(event, box, boxNumber) {
+    const fileInput = event.target;
+    const file = fileInput.files[0];
+
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            const imageSrc = e.target.result;
+
+            const image = document.createElement('img');
+            image.src = imageSrc;
+            image.style.width = '100%';
+            image.style.height = '100%';
+            box.appendChild(image);
+
+            // Hide the upload button
+            fileInput.style.display = 'none';
+        };
+        reader.readAsDataURL(file);
+    }
+}
+
+function exportCollage() {
+    const width = parseInt(document.getElementById('widthInput').value);
+    const height = parseInt(document.getElementById('heightInput').value);
+
+    html2canvas(document.getElementById('canvas'), {
+        width: width,
+        height: height
+    }).then(function (canvas) {
+        var link = document.createElement("a");
+        document.body.appendChild(link);
+        link.download = "collage.png";
+        link.href = canvas.toDataURL();
+        link.target = '_blank';
+        link.click();
+        document.body.removeChild(link);
+    });
+}
+</script>
+
+<!-- Include the html2canvas library -->
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
 
 </body>
-
-</html>
-
-
-    <script>
-        function generateCoordinates() {
-            const width = parseInt(document.getElementById('widthInput').value);
-            const height = parseInt(document.getElementById('heightInput').value);
-            const cols = parseInt(document.getElementById('colsInput').value);
-            const rows = parseInt(document.getElementById('rowsInput').value);
-
-            if (width > 920) {
-                alert('Width should be 920 or less.');
-                return;
-            }
-
-            const stepX = width / cols;
-            const stepY = height / rows;
-
-            let coordinates = '';
-
-            const canvas = document.getElementById('canvas');
-            canvas.style.width = width + 'px';
-            canvas.style.height = height + 'px';
-            canvas.innerHTML = ''; // Reset canvas
-
-            const coordinatesOutput = document.getElementById('coordinatesOutput');
-            coordinatesOutput.textContent = ''; // Reset coordinates
-
-            for (let row = 0; row < rows; row++) {
-                for (let col = 0; col < cols; col++) {
-                    let x1 = Math.round((col * stepX) * 100) / 100;
-                    let y1 = Math.round((row * stepY) * 100) / 100;
-                    let x2 = Math.round(((col + 1) * stepX) * 100) / 100;
-                    let y2 = Math.round(((row + 1) * stepY) * 100) / 100;
-
-                    coordinates += `${x1},${y1};`;
-                    coordinates += `${x1},${y2};`;
-                    coordinates += `${x2},${y2};`;
-                    coordinates += `${x2},${y1};`;
-                    coordinates += `${x1},${y1};\n`; // Newline for each shape
-
-                    // Display boxes
-                    const box = document.createElement('div');
-                    box.className = 'box';
-                    box.style.width = stepX + 'px';
-                    box.style.height = stepY + 'px';
-                    canvas.appendChild(box);
-
-                    // Display numbers
-                    const centerX = (x1 + x2) / 2;
-                    const centerY = (y1 + y2) / 2;
-                    const number = document.createElement('div');
-                    number.className = 'number';
-                    number.textContent = row * cols + col + 1;
-                    box.appendChild(number);
-                }
-            }
-
-            coordinatesOutput.textContent = coordinates;
-            coordinatesOutput.style.display = 'block'; // Show coordinates as plain text
-        }
-
-        function copyCoordinates() {
-            const coordinatesOutput = document.getElementById('coordinatesOutput');
-            const coordinates = coordinatesOutput.textContent;
-
-            const tempTextArea = document.createElement('textarea');
-            tempTextArea.value = coordinates;
-            document.body.appendChild(tempTextArea);
-
-            tempTextArea.select();
-            document.execCommand('copy');
-
-            document.body.removeChild(tempTextArea);
-            alert('Coordinates copied to clipboard!');
-        }
-
-        function uploadImages() {
-            const boxes = document.querySelectorAll('.box');
-
-            boxes.forEach((box, index) => {
-                const uploadButton = document.createElement('input');
-                uploadButton.type = 'file';
-                uploadButton.accept = 'image/*';
-                uploadButton.addEventListener('change', (event) => handleImageUpload(event, index + 1));
-                box.appendChild(uploadButton);
-
-                // Hide the number
-                box.querySelector('.number').style.display = 'none';
-            });
-        }
-
-        function handleImageUpload(event, boxNumber) {
-            const fileInput = event.target;
-            const file = fileInput.files[0];
-
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    const imageSrc = e.target.result;
-                    const box = fileInput.parentElement;
-
-                    const image = document.createElement('img');
-                    image.src = imageSrc;
-                    image.style.width = '100%';
-                    image.style.height = '100%';
-                    box.appendChild(image);
-
-                    // Hide the upload button
-                    fileInput.style.display = 'none';
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-
-        function exportCollage() {
-            const width = parseInt(document.getElementById('widthInput').value);
-            const height = parseInt(document.getElementById('heightInput').value);
-
-            html2canvas(document.getElementById('canvas'), {
-                width: width,
-                height: height
-            }).then(function (canvas) {
-                var link = document.createElement("a");
-                document.body.appendChild(link);
-                link.download = "collage.png";
-                link.href = canvas.toDataURL();
-                link.target = '_blank';
-                link.click();
-                document.body.removeChild(link);
-            });
-        }
-    </script>
-
-    <!-- Include the html2canvas library -->
-    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
-
-</body>
-
 </html>
