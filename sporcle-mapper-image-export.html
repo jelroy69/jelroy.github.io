@@ -20,6 +20,10 @@
         }
         .number {
             position: absolute;
+            text-align: center;
+            width: 100%;
+            top: 50%;
+            left: 50%;
             transform: translate(-50%, -50%);
             z-index: 1; /* Ensure numbers are above boxes */
         }
@@ -140,8 +144,6 @@ function generateCoordinates() {
             const number = document.createElement('div');
             number.className = 'number';
             number.textContent = row * cols + col + 1;
-            number.style.left = centerX + 'px';
-            number.style.top = centerY + 'px';
             box.appendChild(number);
 
             // Display upload button
@@ -200,7 +202,17 @@ function uploadImages() {
 }
 
 function exportCollage() {
-    // Existing code for exporting the collage
+    const canvas = document.getElementById('canvas');
+
+    html2canvas(canvas).then(function(canvas) {
+        var link = document.createElement("a");
+        document.body.appendChild(link);
+        link.download = "collage.png";
+        link.href = canvas.toDataURL();
+        link.target = '_blank';
+        link.click();
+        document.body.removeChild(link);
+    });
 }
 </script>
 
