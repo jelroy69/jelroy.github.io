@@ -152,14 +152,6 @@
                     number.className = 'number';
                     number.textContent = row * cols + col + 1;
                     box.appendChild(number);
-
-                    // Display upload button
-                    const uploadButton = document.createElement('input');
-                    uploadButton.type = 'file';
-                    uploadButton.accept = 'image/*';
-                    uploadButton.className = 'uploadButton';
-                    uploadButton.addEventListener('change', (event) => handleImageUpload(event, box, row * cols + col + 1));
-                    box.appendChild(uploadButton);
                 }
             }
 
@@ -167,7 +159,7 @@
             coordinatesOutput.style.display = 'block'; // Show coordinates as plain text
 
             // Initially hide upload buttons
-            toggleUploadButtons();
+            hideUploadButtons();
         }
 
         function copyCoordinates() {
@@ -186,23 +178,33 @@
         }
 
         function toggleUploadButtons() {
-            const uploadButtons = document.querySelectorAll('.uploadButton');
-
             if (uploadButtonsVisible) {
                 // Clear existing uploads
-                uploadButtons.forEach((button) => {
-                    button.style.display = 'none';
-                    button.parentElement.querySelector('.number').style.display = 'block';
-                });
+                hideUploadButtons();
             } else {
                 // Show upload buttons
-                uploadButtons.forEach((button) => {
-                    button.style.display = 'block';
-                    button.parentElement.querySelector('.number').style.display = 'none';
-                });
+                showUploadButtons();
             }
 
             uploadButtonsVisible = !uploadButtonsVisible;
+        }
+
+        function showUploadButtons() {
+            const uploadButtons = document.querySelectorAll('.uploadButton');
+
+            uploadButtons.forEach((button) => {
+                button.style.display = 'block';
+                button.parentElement.querySelector('.number').style.display = 'none';
+            });
+        }
+
+        function hideUploadButtons() {
+            const uploadButtons = document.querySelectorAll('.uploadButton');
+
+            uploadButtons.forEach((button) => {
+                button.style.display = 'none';
+                button.parentElement.querySelector('.number').style.display = 'block';
+            });
         }
 
         function handleImageUpload(event, box, number) {
