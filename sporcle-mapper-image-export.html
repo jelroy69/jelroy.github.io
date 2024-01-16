@@ -142,7 +142,6 @@
                     box.style.top = y1 + 'px';
                     box.style.width = stepX + 'px';
                     box.style.height = stepY + 'px';
-                    box.dataset.number = row * cols + col + 1; // Store the original number
                     canvas.appendChild(box);
                     boxes.push(box);
 
@@ -153,6 +152,14 @@
                     number.className = 'number';
                     number.textContent = row * cols + col + 1;
                     box.appendChild(number);
+
+                    // Display upload button
+                    const uploadButton = document.createElement('input');
+                    uploadButton.type = 'file';
+                    uploadButton.accept = 'image/*';
+                    uploadButton.className = 'uploadButton';
+                    uploadButton.addEventListener('change', (event) => handleImageUpload(event, box, row * cols + col + 1));
+                    box.appendChild(uploadButton);
                 }
             }
 
@@ -162,20 +169,11 @@
             // Clear existing uploads
             const uploadButtons = document.querySelectorAll('.uploadButton');
             uploadButtons.forEach((button) => {
-                const box = button.parentElement;
-                while (box.firstChild) {
-                    box.removeChild(box.firstChild);
-                }
-
-                // Display number
-                const number = document.createElement('div');
-                number.className = 'number';
-                number.textContent = parseInt(box.dataset.number); // Retrieve the original number
-                box.appendChild(number);
+                button.style.display = 'none';
+                button.parentElement.querySelector('.number').style.display = 'block';
             });
 
-            // Initially hide upload buttons
-            toggleUploadButtons();
+            uploadButtonsVisible = false;
         }
 
         function copyCoordinates() {
@@ -196,33 +194,13 @@
         function toggleUploadButtons() {
             const uploadButtons = document.querySelectorAll('.uploadButton');
 
-            if (uploadButtonsVisible) {
-                // Clear existing uploads
-                uploadButtons.forEach((button) => {
-                    const box = button.parentElement;
-                    while (box.firstChild) {
-                        box.removeChild(box.firstChild);
-                    }
+            // Clear existing uploads
+            uploadButtons.forEach((button) => {
+                button.style.display = 'block';
+                button.parentElement.querySelector('.number').style.display = 'none';
+            });
 
-                    // Display number
-                    const number = document.createElement('div');
-                    number.className = 'number';
-                    number.textContent = parseInt(box.dataset.number); // Retrieve the original number
-                    box.appendChild(number);
-
-                    button.style.display = 'none';
-                });
-            } else {
-                // Show upload buttons
-                uploadButtons.forEach((button) => {
-                    const box = button.parentElement;
-                    const number = box.querySelector('.number');
-                    number.style.display = 'none'; // Hide the number
-                    button.style.display = 'block';
-                });
-            }
-
-            uploadButtonsVisible = !uploadButtonsVisible;
+            uploadButtonsVisible = true;
         }
 
         function handleImageUpload(event, box, number) {
