@@ -14,8 +14,6 @@
             border: 1px solid #000;
             margin-bottom: 20px;
             position: relative;
-            width: calc(100% + 8px);
-            height: calc(100% + 20px);
         }
 
         .box {
@@ -73,7 +71,7 @@
     <button id="exportButton" onclick="exportCollage()">Export Collage</button><br><br>
 
     <div id="canvasContainer">
-        <div id="canvas"></div>
+        <div id="canvas" style="width: calc(100% + 8px); height: calc(100% + 20px);"></div>
     </div>
 
     <script>
