@@ -54,7 +54,6 @@
 
         #generateButton,
         #copyButton,
-        #uploadButton,
         #exportButton {
             clear: both;
         }
@@ -64,6 +63,10 @@
             font-family: monospace;
             float: left;
             clear: both;
+        }
+
+        #uploadToggle {
+            margin-bottom: 10px;
         }
     </style>
 </head>
@@ -84,9 +87,11 @@
 
     <div id="coordinatesOutput" style="display: none;"></div>
 
+    <input type="checkbox" id="uploadToggle" onchange="toggleUploadButtons()">
+    <label for="uploadToggle">Toggle Upload Images</label><br><br>
+
     <button id="generateButton" onclick="generateCoordinates()">Generate Coordinates</button>
     <button id="copyButton" onclick="copyCoordinates()">Copy</button>
-    <button id="uploadButton" onclick="toggleUploadButtons()">Upload Images</button>
     <button id="exportButton" onclick="exportCollage()">Export Collage</button><br><br>
 
     <div id="canvasContainer">
@@ -94,8 +99,6 @@
     </div>
 
     <script>
-        let uploadButtonsVisible = false;
-
         function generateCoordinates() {
             const width = parseInt(document.getElementById('widthInput').value);
             const height = parseInt(document.getElementById('heightInput').value);
@@ -120,8 +123,6 @@
             const coordinatesOutput = document.getElementById('coordinatesOutput');
             coordinatesOutput.textContent = ''; // Reset coordinates
 
-            const boxes = [];
-
             for (let row = 0; row < rows; row++) {
                 for (let col = 0; col < cols; col++) {
                     let x1 = Math.round((col * stepX) * 100) / 100;
@@ -143,7 +144,6 @@
                     box.style.width = stepX + 'px';
                     box.style.height = stepY + 'px';
                     canvas.appendChild(box);
-                    boxes.push(box);
 
                     // Display number
                     const centerX = (x1 + x2) / 2;
@@ -166,14 +166,8 @@
             coordinatesOutput.textContent = coordinates;
             coordinatesOutput.style.display = 'block'; // Show coordinates as plain text
 
-            // Clear existing uploads
-            const uploadButtons = document.querySelectorAll('.uploadButton');
-            uploadButtons.forEach((button) => {
-                button.style.display = 'none';
-                button.parentElement.querySelector('.number').style.display = 'block';
-            });
-
-            uploadButtonsVisible = false;
+            // Hide upload buttons by default
+            toggleUploadButtons(false);
         }
 
         function copyCoordinates() {
@@ -191,16 +185,13 @@
             alert('Coordinates copied to clipboard!');
         }
 
-        function toggleUploadButtons() {
+        function toggleUploadButtons(show = true) {
             const uploadButtons = document.querySelectorAll('.uploadButton');
 
-            // Clear existing uploads
             uploadButtons.forEach((button) => {
-                button.style.display = 'block';
-                button.parentElement.querySelector('.number').style.display = 'none';
+                button.style.display = show ? 'block' : 'none';
+                button.parentElement.querySelector('.number').style.display = show ? 'none' : 'block';
             });
-
-            uploadButtonsVisible = true;
         }
 
         function handleImageUpload(event, box, number) {
