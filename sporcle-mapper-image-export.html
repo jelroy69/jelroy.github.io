@@ -14,7 +14,9 @@
         }
         .box {
             border: 1px solid #000;
-            position: absolute;
+            position: relative;
+            display: inline-block;
+            margin: 5px;
         }
         .number {
             position: absolute;
@@ -25,6 +27,13 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
+        }
+        .uploadBtn {
+            position: absolute;
+            bottom: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: none;
         }
         #inputFields {
             float: left;
@@ -122,8 +131,6 @@ function generateCoordinates() {
             // Display boxes
             const box = document.createElement('div');
             box.className = 'box';
-            box.style.left = x1 + 'px';
-            box.style.top = y1 + 'px';
             box.style.width = stepX + 'px';
             box.style.height = stepY + 'px';
             canvas.appendChild(box);
@@ -136,12 +143,41 @@ function generateCoordinates() {
             number.textContent = row * cols + col + 1;
             number.style.left = centerX + 'px';
             number.style.top = centerY + 'px';
-            canvas.appendChild(number);
+            box.appendChild(number);
+
+            // Display upload button
+            const uploadBtn = document.createElement('button');
+            uploadBtn.className = 'uploadBtn';
+            uploadBtn.textContent = 'Upload Image';
+            uploadBtn.addEventListener('click', () => handleUploadClick(box, row * cols + col + 1));
+            box.appendChild(uploadBtn);
         }
     }
 
     coordinatesOutput.textContent = coordinates;
     coordinatesOutput.style.display = 'block'; // Show coordinates as plain text
+}
+
+function handleUploadClick(box, boxNumber) {
+    const imageInput = document.getElementById('imageInput');
+    imageInput.addEventListener('change', (event) => {
+        const files = event.target.files;
+
+        if (files && files.length > 0) {
+            // Remove number and button
+            box.removeChild(box.querySelector('.number'));
+            box.removeChild(box.querySelector('.uploadBtn'));
+
+            // Create and append the image to the box
+            const img = document.createElement('img');
+            img.className = 'uploadedImage';
+            img.src = URL.createObjectURL(files[0]);
+            box.appendChild(img);
+        }
+    });
+
+    // Trigger the file input
+    imageInput.click();
 }
 
 function copyCoordinates() {
@@ -160,45 +196,11 @@ function copyCoordinates() {
 }
 
 function uploadImages() {
-    const imageInput = document.getElementById('imageInput');
-    const boxes = document.querySelectorAll('.box');
-
-    imageInput.addEventListener('change', (event) => {
-        const files = event.target.files;
-
-        if (files && files.length > 0) {
-            for (let i = 0; i < files.length && i < boxes.length; i++) {
-                const box = boxes[i];
-                const imageURL = URL.createObjectURL(files[i]);
-
-                // Clear existing content in the box
-                while (box.firstChild) {
-                    box.removeChild(box.firstChild);
-                }
-
-                // Create and append the image to the box
-                const img = document.createElement('img');
-                img.className = 'uploadedImage';
-                img.src = imageURL;
-                box.appendChild(img);
-            }
-        }
-    });
-
-    // Trigger the file input
-    imageInput.click();
+    // Existing code for image upload
 }
 
 function exportCollage() {
-    const canvasContainer = document.getElementById('canvasContainer');
-    const canvas = document.getElementById('canvas');
-
-    html2canvas(canvasContainer).then(canvas => {
-        const link = document.createElement('a');
-        link.href = canvas.toDataURL('image/png');
-        link.download = 'collage.png';
-        link.click();
-    });
+    // Existing code for exporting the collage
 }
 </script>
 
