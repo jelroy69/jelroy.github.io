@@ -178,6 +178,8 @@
         }
 
         function toggleUploadButtons() {
+            const uploadButtons = document.querySelectorAll('.uploadButton');
+        
             if (uploadButtonsVisible) {
                 // Clear existing uploads
                 hideUploadButtons();
@@ -185,27 +187,30 @@
                 // Show upload buttons
                 showUploadButtons();
             }
-
+        
             uploadButtonsVisible = !uploadButtonsVisible;
         }
-
+        
         function showUploadButtons() {
             const uploadButtons = document.querySelectorAll('.uploadButton');
-
+        
             uploadButtons.forEach((button) => {
                 button.style.display = 'block';
-                button.parentElement.querySelector('.number').style.display = 'none';
+                const number = button.parentElement.querySelector('.number');
+                number.style.display = 'none';
             });
         }
-
+        
         function hideUploadButtons() {
             const uploadButtons = document.querySelectorAll('.uploadButton');
-
+        
             uploadButtons.forEach((button) => {
                 button.style.display = 'none';
-                button.parentElement.querySelector('.number').style.display = 'block';
+                const number = button.parentElement.querySelector('.number');
+                number.style.display = 'block';
             });
         }
+
 
         function handleImageUpload(event, box, number) {
             const fileInput = event.target;
