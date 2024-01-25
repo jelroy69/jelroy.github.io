@@ -117,13 +117,18 @@
     
                     const image = document.createElement('img');
                     image.src = imageSrc;
+                    image.id = `image${number}`;
                     image.style.width = '100%';
                     image.style.height = '100%';
                     box.appendChild(image);
     
                     // Perform Hermite resizing
-                    HERMITE.resize_image(image.id, 200, 200); // Adjust the dimensions as needed
-    
+                    const panzoomInstance = panzoom(image, {
+                        contain: 'outside',
+                        minScale: 1,
+                        maxScale: 4,
+                    });
+                    
                     // Hide the upload button
                     fileInput.style.display = 'none';
                 };
