@@ -236,6 +236,7 @@
         function exportCollage() {
             const width = parseInt(document.getElementById('widthInput').value);
             const height = parseInt(document.getElementById('heightInput').value);
+            const scale = 8;
     
             html2canvas(document.getElementById('canvas'), {
                 width: width,
