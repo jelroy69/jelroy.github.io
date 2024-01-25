@@ -100,7 +100,37 @@
 
     <script>
         let uploadButtonsVisible = false;
+
+        function handleImageResize(event, box, number) {
+            const fileInput = event.target;
+            const file = fileInput.files[0];
     
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const imageSrc = e.target.result;
+    
+                    // Clear existing content
+                    while (box.firstChild) {
+                        box.removeChild(box.firstChild);
+                    }
+    
+                    const image = document.createElement('img');
+                    image.src = imageSrc;
+                    image.style.width = '100%';
+                    image.style.height = '100%';
+                    box.appendChild(image);
+    
+                    // Perform Hermite resizing
+                    HERMITE.resize_image(image.id, 200, 200); // Adjust the dimensions as needed
+    
+                    // Hide the upload button
+                    fileInput.style.display = 'none';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+        
         function generateCoordinates() {
             const width = parseInt(document.getElementById('widthInput').value);
             const height = parseInt(document.getElementById('heightInput').value);
@@ -259,7 +289,26 @@
             coordinatesOutput.textContent = ''; // Reset coordinates
         }
     </script>
+    
+    <script>
+    const HERMITE = {
+        resize_image: function (id, width, height) {
+            const img = document.getElementById(id);
+            const oc = document.createElement('canvas');
+            const octx = oc.getContext('2d');
 
+            oc.width = img.width;
+            oc.height = img.height;
+            octx.drawImage(img, 0, 0);
+
+            img.width = width;
+            img.height = height;
+
+            const ctx = img.getContext('2d');
+            ctx.drawImage(oc, 0, 0, oc.width, oc.height, 0, 0, width, height);
+        }
+    };
+    </script>
 
 
     <!-- Include the html2canvas library -->
