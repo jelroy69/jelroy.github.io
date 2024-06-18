@@ -85,10 +85,10 @@ function generateCoordinates() {
 
     for (let row = 0; row < rows; row++) {
     for (let col = 0; col < cols; col++) {
-        let x1 = Math.round((col * stepX) * 100) / 100;
-        let y1 = Math.round((row * stepY) * 100) / 100;
-        let x2 = Math.round(((col + 1) * stepX) * 100) / 100;
-        let y2 = Math.round(((row + 1) * stepY) * 100) / 100;
+        let x1 = Math.round((col * stepX) * 1) / 1;
+        let y1 = Math.round((row * stepY) * 1) / 1;
+        let x2 = Math.round(((col + 1) * stepX) * 1) / 1;
+        let y2 = Math.round(((row + 1) * stepY) * 1) / 1;
 
         coordinates += `${x1},${y1};`;
         coordinates += `${x1},${y2};`;
